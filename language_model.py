@@ -1,10 +1,6 @@
-import permutation
-import simulated_annealing
-import random
-import math
 import urllib
 import urllib.request
-import language_model
+
 
 class CorpusReader:
 
@@ -12,17 +8,15 @@ class CorpusReader:
         with urllib.request.urlopen(url) as response:
             self.corpus = response.read().decode('utf-8')
             response.close()
-        self.CleanUp()
+        self.clean_up()
 
-
-    def CleanUp (self):
-        sigma = (',','.',':','\n','#','(',')','!','?','\'','\"'," ")
+    def clean_up(self):
+        sigma = (',', '.', ':', '\n', '#', '(', ')', '!', '?', '\'', '\"', " ")
         self.corpus = self.corpus.lower()
         for char in self.corpus:
             if char not in sigma:
-                if ord(char)<97 or ord(char)>122:
-                    self.corpus = self.corpus.replace(char,"")
-
+                if ord(char) < 97 or ord(char) > 122:
+                    self.corpus = self.corpus.replace(char, "")
 
 
 class LanguageModel:
@@ -32,9 +26,9 @@ class LanguageModel:
         self.unigramCount = self.unigramCount(filteredCorpus)
         self.unigramProb = self.unigramProb(filteredCorpus)
         self.bigramCount = self.bigramCount(filteredCorpus)
-        self.bigramProb = self.bigramProb(filteredCorpus)
+        self.bigramProb = self.bigramProb()
 
-    def sigma (self):
+    def sigma(self):
         alpha = "abcdefghijklmnopqrstuvwxyz"
         sigma = [',', '.', ':', '\n', '#', '(', ')', '!', '?', '\'', '\"', " "]
         for char in alpha:
@@ -46,7 +40,7 @@ class LanguageModel:
         for i in range(len(self.sigma)):
             d[self.sigma[i]] = 0
         for char in filteredCorpus.corpus:
-            d[char] += 1;
+            d[char] += 1
         return d
 
     def unigramProb(self, filteredCorpus):
@@ -59,26 +53,21 @@ class LanguageModel:
 
         return d
 
-
     def bigramCount(self, filteredCorpus):
         d = {}
         for i in range(len(self.sigma)):
             for j in range(len(self.sigma)):
-                d[(self.sigma[i],self.sigma[j])] = 0
-        for i in range(1,len(filteredCorpus.corpus)):
-            d[(filteredCorpus.corpus[i-1], filteredCorpus.corpus[i])] += 1;
+                d[(self.sigma[i], self.sigma[j])] = 0
+        for i in range(1, len(filteredCorpus.corpus)):
+            d[(filteredCorpus.corpus[i-1], filteredCorpus.corpus[i])] += 1
         return d
 
-    def bigramProb(self, filteredCorpus):
+    def bigramProb(self):
         d = {}
         for i in range(len(self.sigma)):
             for j in range(len(self.sigma)):
-                C_wiwj = self.bigramCount[(self.sigma[i],self.sigma[j])]+1
+                C_wiwj = self.bigramCount[(self.sigma[i], self.sigma[j])]+1
                 C_wi = self.unigramCount[(self.sigma[i])]
                 V = len(self.sigma)
                 d[self.sigma[i], self.sigma[j]] = C_wiwj/(C_wi + V)
         return d
-
-
-
-

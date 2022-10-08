@@ -1,10 +1,7 @@
 import language_model
 import permutation
 import simulated_annealing
-import random
-import math
-import urllib
-import urllib.request
+
 
 def main():
 
@@ -14,13 +11,13 @@ def main():
     encrypted_message = file.read()
     file.close()
     mapping = create_simple_mapping()
-    imitial_perm = permutation.Permutation(mapping)
+    initial_perm = permutation.Permutation(mapping)
     init_temp = 1000
     threshold = 0.00001
     cool_rate = 0.9995
-    wining = simulated_annealing.SimulatedAnnealing(init_temp,threshold,cool_rate).run(imitial_perm,encrypted_message,lan_model)
+    wining = simulated_annealing.SimulatedAnnealing(init_temp, threshold, cool_rate).run(initial_perm, encrypted_message, lan_model)
 
-    print("The initial temperature, threshold and cooling rate used: ",init_temp,",",threshold,",",cool_rate)
+    print("The initial temperature, threshold and cooling rate used: ", init_temp, ",", threshold, ",", cool_rate)
     print("The winning permutation: ")
     print(wining.mapping)
     print("The content of the deciphered message is: ")
@@ -37,6 +34,5 @@ def create_simple_mapping():
         mapping[char] = char
     return mapping
 
+
 main()
-
-

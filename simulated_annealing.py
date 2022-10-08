@@ -2,6 +2,7 @@ import permutation
 import random
 import math
 
+
 class SimulatedAnnealing:
 
     def __init__(self,  initial_temperature, threshold, cooling_rate):
@@ -10,7 +11,6 @@ class SimulatedAnnealing:
         self.cooling_rate = cooling_rate
 
     def run(self, hypothesis, encrypted_message, lan_model):
-        D = encrypted_message
         H = hypothesis
         T = self.initial_temperature
         while T > self.threshold:
